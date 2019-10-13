@@ -24,6 +24,12 @@ Successfully built 00de8f500328
 Successfully tagged a19/user/build-demo:latest
 ```
 
+You can now see the images:
+
+```bash
+$ docker images | grep $USER/build-demo
+a19/user/build-demo        latest              10292cd1035d        2 minutes ago       512MB
+```
 
 Starting the freshly build container:
 
