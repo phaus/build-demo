@@ -1,0 +1,23 @@
+FROM adoptopenjdk/openjdk11:alpine-slim
+
+RUN apk --no-cache update && apk add --upgrade curl 
+
+COPY . /home/gradle/src
+
+WORKDIR /home/gradle/src
+
+# Download and install Gradle
+RUN \
+    cd /usr/local && \
+    curl -L https://services.gradle.org/distributions/gradle-5.6.2-bin.zip -o gradle-5.6.2-bin.zip && \
+    unzip gradle-5.6.2-bin.zip && \
+    rm gradle-5.6.2-bin.zip
+
+# Export some environment variables
+ENV GRADLE_HOME=/usr/local/gradle-5.6.2
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+RUN gradle build --no-daemon 
+
+RUN rm -Rf /home/gradle/src/
+

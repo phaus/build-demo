@@ -1,0 +1,20 @@
+FROM a19/build-demo/builder:latest as build
+
+COPY . /home/gradle/src
+
+WORKDIR /home/gradle/src
+
+RUN gradle build --no-daemon 
+
+
+
+FROM adoptopenjdk/openjdk11:alpine-jre
+
+RUN mkdir /app
+
+EXPOSE 9001
+
+COPY --from=build /home/gradle/src/build/libs/productservice-0.1.0.jar /app/spring-boot-application.jar
+
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/spring-boot-application.jar"]
+
