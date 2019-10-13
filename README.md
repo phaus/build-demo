@@ -20,6 +20,8 @@ BUILD SUCCESSFUL in 25s
 ```bash
 $ docker build -t a19/$USER/build-demo .
 …
+BUILD SUCCESSFUL in 22s
+…
 Successfully built 00de8f500328
 Successfully tagged a19/user/build-demo:latest
 ```
@@ -52,6 +54,8 @@ $ docker run a19/$USER/build-demo:latest
 ```bash
 $ docker build -f Dockerfile-multi -t a19/$USER/build-demo-multi  .
 …
+BUILD SUCCESSFUL in 20s
+…
 Successfully built adad7203c481
 Successfully tagged a19/root/build-demo-multi:latest
 ```
@@ -82,4 +86,39 @@ $ docker run a19/$USER/build-demo-multi:latest
 2019-10-13 21:52:51.820  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9001 (http)
 …
 2019-10-13 21:52:52.810  INFO 1 --- [           main] com.innoq.product.Application            : Started Application in 3.381 seconds (JVM running for 4.139)
+```
+
+## Using a specific Build Image
+
+```bash
+$ docker build -f Dockerfile-builder -t a19/build-demo/builder:latest .
+…
+Successfully built ad62d12483db
+Successfully tagged a19/build-demo/builder:latest
+```
+
+Check if the images was build:
+
+```bash
+$ docker images | grep a19/build-demo/builder
+a19/build-demo/builder        latest              e9460a98e29b        11 seconds ago      402MB
+```
+
+Building the Application with the newly created Build-Image:
+
+```bash
+$ docker build -f Dockerfile-with-builder -t a19/$USER/build-demo-with-builder  .
+…
+BUILD SUCCESSFUL in 9s
+…
+Successfully built adad7203c481
+Successfully tagged a19/user/build-demo-with-builder:latest
+```
+
+Compare the image sizes:
+
+```bash
+$ docker images | grep a19/$USER/build-demo-
+a19/root/build-demo-with-builder   latest              adad7203c481        18 minutes ago      158MB
+a19/root/build-demo-multi          latest              adad7203c481        18 minutes ago      158MB
 ```
